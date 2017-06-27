@@ -22,18 +22,16 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection,"INSERT INFO RESIDENCIA(nome) VALUES(@nome)");
+                SqlCommand comand = createCommand(conection, "INSERT INTO RESIDENCIA(nome) VALUES(@nome); SELECT CAST(scope_identity() AS int)");
 
                 // Define as informações do parâmetro criado
                 SqlParameter param = new SqlParameter("@nome", residencia.Nome);
                 comand.Parameters.Add(param);
 
-                comand.ExecuteNonQuery();
+                // TODO: Verificar se o resultado retornado não é nulo para poder converter.
+                residencia.Id = Convert.ToInt32( comand.ExecuteNonQuery() );
 
-                // Pegar ultimo valor de id inserido
-                //entity.Id = cmd.;
                 return residencia;
-
             }
             finally
             {
@@ -57,7 +55,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "SELECT id,nome from RESIDENCIA where id = @id");
+                SqlCommand comand = createCommand(conection, "SELECT id,nome from RESIDENCIAS where id = @id");
                 
                 // Define as informações de parâmetro
                 SqlParameter param = new SqlParameter("@id", id);
@@ -87,7 +85,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection,"SELECT id,nome from RESIDENCIA");                
+                SqlCommand comand = createCommand(conection,"SELECT id,nome from RESIDENCIAS");                
 
                 // Executando o commando e obtendo o resultado
                 reader = comand.ExecuteReader();
@@ -112,12 +110,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = new SqlCommand();
-
-                //TODO: SQL
-                comand.CommandText = "INSERT INFO RESIDENCIA(nome) VALUES(@id)";
-                comand.CommandType = CommandType.Text;
-                comand.Connection = conection;
+                SqlCommand comand = createCommand(conection, "DELETE from RESIDENCIAS where id = @id");
 
                 // Define as informações do parâmetro criado
                 SqlParameter param = new SqlParameter("@id", residencia.Id);
@@ -127,7 +120,6 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 comand.ExecuteNonQuery();
 
                 return residencia;
-
             }
             finally
             {
@@ -148,17 +140,13 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = new SqlCommand();
-
-                //TODO: SQL
-                comand.CommandText = "UPDATE Residencias SET Nome = @Nome WHERE ID = @ID;";
-                comand.CommandType = CommandType.Text;
-                comand.Connection = conection;
+                SqlCommand comand = createCommand(conection, "UPDATE RESIDENCIAS Set nome = @nome WHERE id = @id");
 
                 // Define as informações do parâmetro criado
-                SqlParameter param = new SqlParameter("@ID", residencia.Id);
-           
+                SqlParameter param = new SqlParameter("@id", residencia.Id);
                 comand.Parameters.Add(param);
+                SqlParameter param1 = new SqlParameter("@nome", residencia.Nome);
+                comand.Parameters.Add(param1);
 
                 comand.ExecuteNonQuery();
                 
@@ -186,7 +174,6 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
 
                     residencia.Id = Convert.ToInt32(reader["id"]);
                     residencia.Nome = (String)reader["nome"];
-
                 }
 
             }
