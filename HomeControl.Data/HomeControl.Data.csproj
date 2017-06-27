@@ -56,6 +56,15 @@
     <Compile Include="Dal\Context\HomeControlDBContext.cs" />
     <Compile Include="Dal\Context\IHomeControlDBContext.cs" />
     <Compile Include="Dal\Dao\Base\DefaultDao.cs" />
+    <Compile Include="Dal\Dao\Custom\Implementations\AdoNet\AbstractAdoNetDao.cs" />
+    <Compile Include="Dal\Dao\Custom\Implementations\AdoNet\ComodoDaoAdoNet.cs" />
+    <Compile Include="Dal\Dao\Custom\Implementations\AdoNet\ConnectionFactory.cs" />
+    <Compile Include="Dal\Dao\Custom\Implementations\AdoNet\DispositivoDaoAdoNet.cs" />
+    <Compile Include="Dal\Dao\Custom\Implementations\AdoNet\EmbarcadoDatoAdoNet.cs" />
+    <Compile Include="Dal\Dao\Custom\Implementations\AdoNet\HistoricoUsoDaoAdoNet.cs" />
+    <Compile Include="Dal\Dao\Custom\Implementations\AdoNet\InterruptorDaoAdoNet.cs" />
+    <Compile Include="Dal\Dao\Custom\Implementations\AdoNet\ResidenciaDaoAdoNet.cs" />
+    <Compile Include="Dal\Dao\Custom\Implementations\AdoNet\SensorDaoAdoNet.cs" />
     <Compile Include="Dal\Dao\Custom\Implementations\HistoricoUsoDao.cs" />
     <Compile Include="Dal\Dao\Custom\Implementations\InterruptorDao.cs" />
     <Compile Include="Dal\Dao\Custom\Implementations\SensorDao.cs" />
