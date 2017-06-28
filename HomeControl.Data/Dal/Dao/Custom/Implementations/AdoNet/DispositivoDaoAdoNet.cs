@@ -28,7 +28,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 comand.Parameters.Add(param);
                 SqlParameter param1 = new SqlParameter("@Porta", dispositivo.Porta);
                 comand.Parameters.Add(param1);
-                SqlParameter param2 = new SqlParameter("@Nome", null);
+                SqlParameter param2 = new SqlParameter("@Nome", ""); // Campo faltando no Modelo
                 comand.Parameters.Add(param2);
                 SqlParameter param3 = new SqlParameter("@ValorMaximo", ((DefaultPotenciometro)dispositivo).ValorMaximo );
                 comand.Parameters.Add(param3);
@@ -36,7 +36,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 comand.Parameters.Add(param4);
                 SqlParameter param5 = new SqlParameter("@Estado", dispositivo.Estado );
                 comand.Parameters.Add(param5);
-                SqlParameter param6 = new SqlParameter("@IdControlador", null );
+                SqlParameter param6 = new SqlParameter("@IdControlador", "" ); // Campo faltando no Modelo
                 comand.Parameters.Add(param6);
 
                 // TODO: Verificar se o resultado retornado não é nulo para poder converter.
@@ -160,7 +160,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 comand.Parameters.Add(param1);
                 SqlParameter param2 = new SqlParameter("@Porta", dispositivo.Porta);
                 comand.Parameters.Add(param2);
-                SqlParameter param3 = new SqlParameter("@Nome", null);
+                SqlParameter param3 = new SqlParameter("@Nome", "");
                 comand.Parameters.Add(param3);
                 SqlParameter param4 = new SqlParameter("@ValorMaximo", ((DefaultPotenciometro)dispositivo).ValorMaximo);
                 comand.Parameters.Add(param4);
@@ -168,7 +168,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 comand.Parameters.Add(param5);
                 SqlParameter param6 = new SqlParameter("@Estado", dispositivo.Estado);
                 comand.Parameters.Add(param6);
-                SqlParameter param7 = new SqlParameter("@IdControlador", null);
+                SqlParameter param7 = new SqlParameter("@IdControlador", "");
                 comand.Parameters.Add(param7);
 
                 comand.ExecuteNonQuery();
@@ -181,6 +181,18 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 closeResources(conection, null);
             }
 
+        }
+
+        private Dispositivo readSingleDispositivo(SqlDataReader reader)
+        {
+            Dispositivo dispositivo = null;
+
+            if (reader.Read())
+            {
+                dispositivo = readDispositivo(reader);
+            }
+
+            return dispositivo;
         }
 
         private Dispositivo readDispositivo(SqlDataReader reader)
@@ -217,7 +229,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
             if (reader != null)
             {
 
-                while (reader.NextResult())
+                while (reader.Read())
                 {
                     dispositivos.Add(readDispositivo(reader));
                 }

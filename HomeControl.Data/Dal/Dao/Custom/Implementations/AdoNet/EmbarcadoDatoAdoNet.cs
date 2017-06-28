@@ -57,7 +57,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "SELECT (  IdControlador, Nome, Ip_Address, Mac_Address ) from CONTROLADOR where IdControlador = @IdControlador");
+                SqlCommand comand = createCommand(conection, "SELECT IdControlador, Nome, Ip_Address, Mac_Address from CONTROLADOR where IdControlador = @IdControlador");
 
                 // Define as informações de parâmetro
                 SqlParameter param = new SqlParameter("@IdControlador", id);
@@ -87,10 +87,10 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "SELECT (  IdControlador, Nome, Ip_Address, Mac_Address ) from CONTROLADOR");
+                SqlCommand comand = createCommand(conection, "SELECT IdControlador, Nome, Ip_Address, Mac_Address from CONTROLADOR");
 
                 // Executando o commando e obtendo o resultado
-                reader = comand.ExecuteReader();
+               reader = comand.ExecuteReader();
 
                 return readAllEmbarcado(reader);
 
@@ -166,6 +166,18 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
 
         }
 
+        private Embarcado readSingleEmbarcado(SqlDataReader reader)
+        {
+            Embarcado embarcado = null;
+
+            if (reader.Read())
+            {
+                embarcado = readEmbarcado(reader);
+            }
+
+            return embarcado;
+        }
+
         private Embarcado readEmbarcado(SqlDataReader reader)
         {
             Embarcado embarcado = null;
@@ -196,7 +208,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
             if (reader != null)
             {
 
-                while (reader.NextResult())
+                while (reader.Read())
                 {
                     embarcados.Add(readEmbarcado(reader));
                 }

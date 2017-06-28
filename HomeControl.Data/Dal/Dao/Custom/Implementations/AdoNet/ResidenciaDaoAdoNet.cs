@@ -27,15 +27,15 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 // Define as informações do parâmetro criado
                 SqlParameter param = new SqlParameter("@Nome", residencia.Nome);
                 comand.Parameters.Add(param);
-                SqlParameter param1 = new SqlParameter("@Cidade", null);
+                SqlParameter param1 = new SqlParameter("@Cidade", ""); // Campo faltando no Modelo
                 comand.Parameters.Add(param1);
-                SqlParameter param2 = new SqlParameter("@Pais", null);
+                SqlParameter param2 = new SqlParameter("@Pais", ""); // Campo faltando no Modelo
                 comand.Parameters.Add(param2);
-                SqlParameter param3 = new SqlParameter("@Bairro", null);
+                SqlParameter param3 = new SqlParameter("@Bairro", ""); // Campo faltando no Modelo
                 comand.Parameters.Add(param3);
-                SqlParameter param4 = new SqlParameter("@Rua", null);
+                SqlParameter param4 = new SqlParameter("@Rua", ""); // Campo faltando no Modelo
                 comand.Parameters.Add(param4);
-                SqlParameter param5 = new SqlParameter("@Numero", null);
+                SqlParameter param5 = new SqlParameter("@Numero", ""); // Campo faltando no Modelo
                 comand.Parameters.Add(param5);
 
                 // TODO: Verificar se o resultado retornado não é nulo para poder converter.
@@ -157,15 +157,15 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 comand.Parameters.Add(param);
                 SqlParameter param1 = new SqlParameter("@Nome", residencia.Nome);
                 comand.Parameters.Add(param1);
-                SqlParameter param2 = new SqlParameter("@Cidade", null);
+                SqlParameter param2 = new SqlParameter("@Cidade", ""); // Campo faltando no Modelo
                 comand.Parameters.Add(param2);
-                SqlParameter param3 = new SqlParameter("@Pais", null);
+                SqlParameter param3 = new SqlParameter("@Pais", ""); // Campo faltando no Modelo
                 comand.Parameters.Add(param3);
-                SqlParameter param4 = new SqlParameter("@Bairro", null);
+                SqlParameter param4 = new SqlParameter("@Bairro", ""); // Campo faltando no Modelo
                 comand.Parameters.Add(param4);
-                SqlParameter param5 = new SqlParameter("@Rua", null);
+                SqlParameter param5 = new SqlParameter("@Rua", ""); // Campo faltando no Modelo
                 comand.Parameters.Add(param5);
-                SqlParameter param6 = new SqlParameter("@Numero", null);
+                SqlParameter param6 = new SqlParameter("@Numero", ""); // Campo faltando no Modelo
                 comand.Parameters.Add(param6);
 
                 comand.ExecuteNonQuery();
