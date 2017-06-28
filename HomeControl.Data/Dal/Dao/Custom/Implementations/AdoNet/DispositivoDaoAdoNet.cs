@@ -21,27 +21,23 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "INSERT INTO DISPOSITIVOES( Ativo, Porta, Estado, Discriminator, Comodo_Id, ValorAtual, ValorMaximo, ValorMinimo, EstadoAtual ) VALUES( @Ativo, @Porta, @Estado, @Discriminator, @Comodo_Id, @ValorAtual, @ValorMaximo, @ValorMinimo, @EstadoAtual ); SELECT CAST(scope_identity() AS int)");
+                SqlCommand comand = createCommand(conection, "INSERT INTO DISPOSITIVO( Ativo, Porta, Nome, ValorMaximo, ValorMinimo, Estado, IdControlador ) VALUES( @Ativo, @Porta, @Nome, @ValorMaximo, @ValorMinimo, @Estado, @IdControlador ); SELECT CAST(scope_identity() AS int)");
 
                 // Define as informações do parâmetro criado
                 SqlParameter param = new SqlParameter("@Ativo", dispositivo.Ativo);
                 comand.Parameters.Add(param);
                 SqlParameter param1 = new SqlParameter("@Porta", dispositivo.Porta);
                 comand.Parameters.Add(param1);
-                SqlParameter param2 = new SqlParameter("@Estado", dispositivo.Estado);
+                SqlParameter param2 = new SqlParameter("@Nome", null);
                 comand.Parameters.Add(param2);
-                SqlParameter param3 = new SqlParameter("@Discriminator", null ); // dispositivo.Discriminator ??
+                SqlParameter param3 = new SqlParameter("@ValorMaximo", ((DefaultPotenciometro)dispositivo).ValorMaximo );
                 comand.Parameters.Add(param3);
-                SqlParameter param4 = new SqlParameter("@Comodo_Id", dispositivo.ComodoId);
+                SqlParameter param4 = new SqlParameter("@ValorMinimo", ((DefaultPotenciometro)dispositivo).ValorMinimo );
                 comand.Parameters.Add(param4);
-                SqlParameter param5 = new SqlParameter("@ValorAtual", ((DefaultPotenciometro) dispositivo).ValorAtual ); // ??
+                SqlParameter param5 = new SqlParameter("@Estado", dispositivo.Estado );
                 comand.Parameters.Add(param5);
-                SqlParameter param6 = new SqlParameter("@ValorMaximo", ((DefaultPotenciometro)dispositivo).ValorMaximo ); // ??
+                SqlParameter param6 = new SqlParameter("@IdControlador", null );
                 comand.Parameters.Add(param6);
-                SqlParameter param7 = new SqlParameter("@ValorMinimo", ((DefaultPotenciometro)dispositivo).ValorMinimo ); // ??
-                comand.Parameters.Add(param7);
-                SqlParameter param8 = new SqlParameter("@EstadoAtual", ((DefaultPotenciometro)dispositivo).EstadoAtual ); // ??
-                comand.Parameters.Add(param8);
 
                 // TODO: Verificar se o resultado retornado não é nulo para poder converter.
                 dispositivo.Id = Convert.ToInt32(comand.ExecuteNonQuery());
@@ -70,7 +66,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "SELECT (  Id, Ativo, Porta, Estado, Discriminator, Comodo_Id, ValorAtual, ValorMaximo, ValorMinimo, EstadoAtual ) from DISPOSITIVOES where Id = @Id");
+                SqlCommand comand = createCommand(conection, "SELECT (  IdDispositivo, Ativo, Porta, Nome, ValorMaximo, ValorMinimo, Estado, IdControlador ) from DISPOSITIVO where IdDispositivo = @Id");
 
                 // Define as informações de parâmetro
                 SqlParameter param = new SqlParameter("@Id", id);
@@ -100,7 +96,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "SELECT (  Id, Ativo, Porta, Estado, Discriminator, Comodo_Id, ValorAtual, ValorMaximo, ValorMinimo, EstadoAtual ) from DISPOSITIVOES");
+                SqlCommand comand = createCommand(conection, "SELECT (  IdDispositivo, Ativo, Porta, Nome, ValorMaximo, ValorMinimo, Estado, IdControlador ) from DISPOSITIVO");
 
                 // Executando o commando e obtendo o resultado
                 reader = comand.ExecuteReader();
@@ -125,7 +121,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "DELETE from DISPOSITIVOES where Id = @Id");
+                SqlCommand comand = createCommand(conection, "DELETE from DISPOSITIVO where IdDispositivo = @Id");
 
                 // Define as informações do parâmetro criado
                 SqlParameter param = new SqlParameter("@Id", dispositivo.Id);
@@ -155,29 +151,25 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
                 
-                SqlCommand comand = createCommand(conection, "UPDATE DISPOSITIVOES Set Ativo = @Ativo, Porta = @Porta, Estado = @Estado, Discriminator = @Discriminator, Comodo_Id = @Comodo_Id, ValorAtual = @ValorAtual, ValorMaximo = @ValorMaximo, ValorMinimo = @ValorMinimo, EstadoAtual = @EstadoAtual WHERE Id = @Id");
+                SqlCommand comand = createCommand(conection, "UPDATE DISPOSITIVO Set Ativo = @Ativo, Porta = @Porta, Nome = @Nome, ValorMaximo = @ValorMaximo, ValorMinimo = @ValorMinimo, Estado = @Estado, IdControlador = @IdControlador WHERE IdDispositivo = @IdDispositivo");
 
                 // Define as informações do parâmetro criado
-                SqlParameter param = new SqlParameter("@Id", dispositivo.Id);
+                SqlParameter param = new SqlParameter("@IdDispositivo", dispositivo.Id);
                 comand.Parameters.Add(param);
                 SqlParameter param1 = new SqlParameter("@Ativo", dispositivo.Ativo);
                 comand.Parameters.Add(param1);
                 SqlParameter param2 = new SqlParameter("@Porta", dispositivo.Porta);
                 comand.Parameters.Add(param2);
-                SqlParameter param3 = new SqlParameter("@Estado", dispositivo.Estado);
+                SqlParameter param3 = new SqlParameter("@Nome", null);
                 comand.Parameters.Add(param3);
-                SqlParameter param4 = new SqlParameter("@Discriminator", null); // dispositivo.Discriminator ??
+                SqlParameter param4 = new SqlParameter("@ValorMaximo", ((DefaultPotenciometro)dispositivo).ValorMaximo);
                 comand.Parameters.Add(param4);
-                SqlParameter param5 = new SqlParameter("@Comodo_Id", dispositivo.ComodoId);
+                SqlParameter param5 = new SqlParameter("@ValorMinimo", ((DefaultPotenciometro)dispositivo).ValorMinimo);
                 comand.Parameters.Add(param5);
-                SqlParameter param6 = new SqlParameter("@ValorAtual", ((DefaultPotenciometro)dispositivo).ValorAtual); // ??
+                SqlParameter param6 = new SqlParameter("@Estado", dispositivo.Estado);
                 comand.Parameters.Add(param6);
-                SqlParameter param7 = new SqlParameter("@ValorMaximo", ((DefaultPotenciometro)dispositivo).ValorMaximo); // ??
+                SqlParameter param7 = new SqlParameter("@IdControlador", null);
                 comand.Parameters.Add(param7);
-                SqlParameter param8 = new SqlParameter("@ValorMinimo", ((DefaultPotenciometro)dispositivo).ValorMinimo); // ??
-                comand.Parameters.Add(param8);
-                SqlParameter param9 = new SqlParameter("@EstadoAtual", ((DefaultPotenciometro)dispositivo).EstadoAtual); // ??
-                comand.Parameters.Add(param9);
 
                 comand.ExecuteNonQuery();
 
@@ -202,16 +194,14 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 {
                     dispositivo = new DefaultPotenciometro();
 
-                    dispositivo.Id = Convert.ToInt32(reader["Id"]);
-                    dispositivo.Ativo = (Boolean)reader["Nome"];
+                    dispositivo.Id = Convert.ToInt32(reader["IdDispositivo"]);
+                    dispositivo.Ativo = (Boolean)reader["Ativo"];
                     dispositivo.Porta = Convert.ToInt32(reader["Porta"]);
+                    //dispositivo.Nome = Convert.ToInt32(reader["Nome"]);       // Incluir Nome
+                    dispositivo.ValorMaximo = (float)Convert.ToDouble(reader["ValorMaximo"]);
+                    dispositivo.ValorMinimo = (float)Convert.ToDouble(reader["ValorMinimo"]);
                     dispositivo.Estado = Convert.ToInt32(reader["Estado"]);
-                    //dispositivo.Discriminator = (String)reader["Discriminator"]; // ???
-                    dispositivo.ComodoId = Convert.ToInt32(reader["Comodo_Id"]);
-                    dispositivo.ValorAtual  = (float) Convert.ToDouble(reader["ValorAtual"]); // Funciona ??
-                    dispositivo.ValorMaximo = (float) Convert.ToDouble(reader["ValorMaximo"]);
-                    dispositivo.ValorMinimo = (float) Convert.ToDouble(reader["ValorMinimo"]);
-                    dispositivo.EstadoAtual = (float) Convert.ToDouble(reader["EstadoAtual"]);
+                    //dispositivo.IdControlador = Convert.ToInt32(reader["IdControlador"]);     // Incluir IdControlador
                 }
 
             }
@@ -249,7 +239,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "SELECT (  Id, Ativo, Porta, Estado, Discriminator, Comodo_Id, ValorAtual, ValorMaximo, ValorMinimo, EstadoAtual ) from DISPOSITIVOES WHERE Porta = @Porta");
+                SqlCommand comand = createCommand(conection, "SELECT (  IdDispositivo, Ativo, Porta, Nome, ValorMaximo, ValorMinimo, Estado, IdControlador ) from DISPOSITIVO WHERE Porta = @Porta");
 
                 SqlParameter param = new SqlParameter("@Porta", porta);
                 comand.Parameters.Add(param);

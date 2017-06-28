@@ -20,14 +20,14 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "INSERT INTO EMBARCADOES( nome, ipAddress, macAddress ) VALUES( @nome, @ipAddress, @macAddress ); SELECT CAST(scope_identity() AS int)");
+                SqlCommand comand = createCommand(conection, "INSERT INTO CONTROLADOR( Nome, Ip_Address, Mac_Address ) VALUES( @Nome, @Ip_Address, @Mac_Address ); SELECT CAST(scope_identity() AS int)");
 
                 // Define as informações do parâmetro criado
-                SqlParameter param = new SqlParameter("@nome", embarcado.Nome);
+                SqlParameter param = new SqlParameter("@Nome", embarcado.Nome);
                 comand.Parameters.Add(param);
-                SqlParameter param1 = new SqlParameter("@ipAddress", embarcado.Socket);
+                SqlParameter param1 = new SqlParameter("@Ip_Address", embarcado.Socket);
                 comand.Parameters.Add(param1);
-                SqlParameter param2 = new SqlParameter("@macAddress", embarcado.MacAddress);
+                SqlParameter param2 = new SqlParameter("@Mac_Address", embarcado.MacAddress);
                 comand.Parameters.Add(param2);
 
                 // TODO: Verificar se o resultado retornado não é nulo para poder converter.
@@ -57,10 +57,10 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "SELECT (  id,nome, ipAddress, macAddress ) from EMBARCADOES where id = @id");
+                SqlCommand comand = createCommand(conection, "SELECT (  IdControlador, Nome, Ip_Address, Mac_Address ) from CONTROLADOR where IdControlador = @IdControlador");
 
                 // Define as informações de parâmetro
-                SqlParameter param = new SqlParameter("@id", id);
+                SqlParameter param = new SqlParameter("@IdControlador", id);
                 comand.Parameters.Add(param);
 
                 // Executando o commando e obtendo o resultado
@@ -86,8 +86,8 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 // instantiate and open connection
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
-                
-                SqlCommand comand = createCommand(conection, "SELECT (  id, nome, ipAddress, macAddress ) from EMBARCADOES");
+
+                SqlCommand comand = createCommand(conection, "SELECT (  IdControlador, Nome, Ip_Address, Mac_Address ) from CONTROLADOR");
 
                 // Executando o commando e obtendo o resultado
                 reader = comand.ExecuteReader();
@@ -112,10 +112,10 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "DELETE from EMBARCADOES where id = @id");
+                SqlCommand comand = createCommand(conection, "DELETE from CONTROLADOR where IdControlador = @IdControlador");
 
                 // Define as informações do parâmetro criado
-                SqlParameter param = new SqlParameter("@id", embarcado.Id);
+                SqlParameter param = new SqlParameter("@IdControlador", embarcado.Id);
 
                 comand.Parameters.Add(param);
 
@@ -141,17 +141,17 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
             {
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
-
-                SqlCommand comand = createCommand(conection, "UPDATE EMBARCADOES Set nome = @nome, ipAddress = @ipAddress, macAddress = @macAddress WHERE id = @id");
+               
+                SqlCommand comand = createCommand(conection, "UPDATE CONTROLADOR Set Nome = @Nome, Ip_Address = @Ip_Address, Mac_Address = @Mac_Address WHERE IdControlador = @IdControlador");
 
                 // Define as informações do parâmetro criado
-                SqlParameter param = new SqlParameter("@id", embarcado.Id);
+                SqlParameter param = new SqlParameter("@IdControlador", embarcado.Id);
                 comand.Parameters.Add(param);
-                SqlParameter param1 = new SqlParameter("@nome", embarcado.Nome);
+                SqlParameter param1 = new SqlParameter("@Nome", embarcado.Nome);
                 comand.Parameters.Add(param1);
-                SqlParameter param2 = new SqlParameter("@ipAddress", embarcado.Socket);
+                SqlParameter param2 = new SqlParameter("@Ip_Address", embarcado.Socket);
                 comand.Parameters.Add(param2);
-                SqlParameter param3 = new SqlParameter("@macAddress", embarcado.MacAddress);
+                SqlParameter param3 = new SqlParameter("@Mac_Address", embarcado.MacAddress);
                 comand.Parameters.Add(param3);
 
                 comand.ExecuteNonQuery();
@@ -177,10 +177,10 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 {
                     embarcado = new Embarcado();
 
-                    embarcado.Id = Convert.ToInt32(reader["Id"]);
-                    embarcado.Nome = (String)reader["nome"];
-                    embarcado.Socket = (String)reader["ipAddress"];
-                    embarcado.MacAddress = (String)reader["macAddress"];
+                    embarcado.Id = Convert.ToInt32(reader["IdControlador"]);
+                    embarcado.Nome = (String)reader["Nome"];
+                    embarcado.Socket = (String)reader["Ip_Address"];
+                    embarcado.MacAddress = (String)reader["Mac_Address"];
                 }
 
             }
