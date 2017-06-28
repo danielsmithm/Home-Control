@@ -75,7 +75,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 // Executando o commando e obtendo o resultado
                 reader = comand.ExecuteReader();
 
-                return readDispositivo(reader);
+                return readSingleDispositivo(reader);
 
             }
             finally

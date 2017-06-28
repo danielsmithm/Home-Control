@@ -20,7 +20,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "INSERT INTO DISPOSITIVOES( Ativo, Porta, Estado, Discriminator, Comodo_Id, ValorAtual, ValorMaximo, ValorMinimo, EstadoAtual ) VALUES( @Ativo, @Porta, @Estado, @Discriminator, @Comodo_Id, @ValorAtual, @ValorMaximo, @ValorMinimo, @EstadoAtual ); SELECT CAST(scope_identity() AS int)");
+                SqlCommand comand = createCommand(conection, "INSERT INTO DISPOSITIVO( Ativo, Porta, Estado, Discriminator, Comodo_Id, ValorAtual, ValorMaximo, ValorMinimo, EstadoAtual ) VALUES( @Ativo, @Porta, @Estado, @Discriminator, @Comodo_Id, @ValorAtual, @ValorMaximo, @ValorMinimo, @EstadoAtual ); SELECT CAST(scope_identity() AS int)");
 
                 // Define as informações do parâmetro criado
                 SqlParameter param = new SqlParameter("@Ativo", interruptor.Ativo);
@@ -29,17 +29,17 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 comand.Parameters.Add(param1);
                 SqlParameter param2 = new SqlParameter("@Estado", interruptor.Estado);
                 comand.Parameters.Add(param2);
-                SqlParameter param3 = new SqlParameter("@Discriminator", null); // interruptor.Discriminator ??
+                SqlParameter param3 = new SqlParameter("@Discriminator", ""); // interruptor.Discriminator ??
                 comand.Parameters.Add(param3);
                 SqlParameter param4 = new SqlParameter("@Comodo_Id", interruptor.ComodoId);
                 comand.Parameters.Add(param4);
-                SqlParameter param5 = new SqlParameter("@ValorAtual", null); // ??
+                SqlParameter param5 = new SqlParameter("@ValorAtual", ""); // ??
                 comand.Parameters.Add(param5);
-                SqlParameter param6 = new SqlParameter("@ValorMaximo", null); // ??
+                SqlParameter param6 = new SqlParameter("@ValorMaximo", ""); // ??
                 comand.Parameters.Add(param6);
-                SqlParameter param7 = new SqlParameter("@ValorMinimo", null); // ??
+                SqlParameter param7 = new SqlParameter("@ValorMinimo", ""); // ??
                 comand.Parameters.Add(param7);
-                SqlParameter param8 = new SqlParameter("@EstadoAtual", null); // ??
+                SqlParameter param8 = new SqlParameter("@EstadoAtual", ""); // ??
                 comand.Parameters.Add(param8);
 
                 // TODO: Verificar se o resultado retornado não é nulo para poder converter.
@@ -69,7 +69,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "SELECT (  Id, Ativo, Porta, Estado ) from DISPOSITIVOES where Id = @Id");
+                SqlCommand comand = createCommand(conection, "SELECT (  Id, Ativo, Porta, Estado ) from DISPOSITIVO where Id = @Id");
 
                 // Define as informações de parâmetro
                 SqlParameter param = new SqlParameter("@Id", id);
@@ -99,7 +99,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "SELECT (  Id, Ativo, Porta, Estado ) from DISPOSITIVOES");
+                SqlCommand comand = createCommand(conection, "SELECT (  Id, Ativo, Porta, Estado ) from DISPOSITIVO");
 
                 // Executando o commando e obtendo o resultado
                 reader = comand.ExecuteReader();
@@ -124,7 +124,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "DELETE from DISPOSITIVOES where Id = @Id");
+                SqlCommand comand = createCommand(conection, "DELETE from DISPOSITIVO where Id = @Id");
 
                 // Define as informações do parâmetro criado
                 SqlParameter param = new SqlParameter("@Id", interruptor.Id);
@@ -154,7 +154,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "UPDATE DISPOSITIVOES Set Ativo = @Ativo, Porta = @Porta, Estado = @Estado, Discriminator = @Discriminator, Comodo_Id = @Comodo_Id, ValorAtual = @ValorAtual, ValorMaximo = @ValorMaximo, ValorMinimo = @ValorMinimo, EstadoAtual = @EstadoAtual WHERE Id = @Id");
+                SqlCommand comand = createCommand(conection, "UPDATE DISPOSITIVO Set Ativo = @Ativo, Porta = @Porta, Estado = @Estado, Discriminator = @Discriminator, Comodo_Id = @Comodo_Id, ValorAtual = @ValorAtual, ValorMaximo = @ValorMaximo, ValorMinimo = @ValorMinimo, EstadoAtual = @EstadoAtual WHERE Id = @Id");
 
                 // Define as informações do parâmetro criado
                 SqlParameter param = new SqlParameter("@Id", interruptor.Id);
@@ -165,17 +165,17 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 comand.Parameters.Add(param2);
                 SqlParameter param3 = new SqlParameter("@Estado", interruptor.Estado);
                 comand.Parameters.Add(param3);
-                SqlParameter param4 = new SqlParameter("@Discriminator", null); // interruptor.Discriminator ??
+                SqlParameter param4 = new SqlParameter("@Discriminator", ""); // interruptor.Discriminator ??
                 comand.Parameters.Add(param4);
                 SqlParameter param5 = new SqlParameter("@Comodo_Id", interruptor.ComodoId);
                 comand.Parameters.Add(param5);
-                SqlParameter param6 = new SqlParameter("@ValorAtual", null ); // ??
+                SqlParameter param6 = new SqlParameter("@ValorAtual", "" ); // ??
                 comand.Parameters.Add(param6);
-                SqlParameter param7 = new SqlParameter("@ValorMaximo", null); // ??
+                SqlParameter param7 = new SqlParameter("@ValorMaximo", ""); // ??
                 comand.Parameters.Add(param7);
-                SqlParameter param8 = new SqlParameter("@ValorMinimo", null); // ??
+                SqlParameter param8 = new SqlParameter("@ValorMinimo", ""); // ??
                 comand.Parameters.Add(param8);
-                SqlParameter param9 = new SqlParameter("@EstadoAtual", null); // ??
+                SqlParameter param9 = new SqlParameter("@EstadoAtual", ""); // ??
                 comand.Parameters.Add(param9);
 
                 comand.ExecuteNonQuery();

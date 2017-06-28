@@ -66,7 +66,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 // Executando o commando e obtendo o resultado
                 reader = comand.ExecuteReader();
 
-                return readEmbarcado(reader);
+                return readSingleEmbarcado(reader);
 
             }
             finally
