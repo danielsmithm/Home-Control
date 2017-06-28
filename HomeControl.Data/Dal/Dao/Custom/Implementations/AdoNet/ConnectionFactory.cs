@@ -13,10 +13,10 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
         public static string getConnectionString()
         {
             //TODO: Colocar em arquivo de configuração.
-            string ConnectionString = "Data Source= cnat167741; ";
-            ConnectionString += "User ID= sa; ";
-            ConnectionString += "Password= senha; ";
-            ConnectionString += "Initial Catalog=NorthWind";
+            string ConnectionString = "Data Source=DIOGO-PC\\SQLEXPRESS2014; ";
+            ConnectionString += "User ID=homecontrol; ";
+            ConnectionString += "Password=123456; ";
+            ConnectionString += "Initial Catalog=HomeControl";
             return ConnectionString;
         }
 

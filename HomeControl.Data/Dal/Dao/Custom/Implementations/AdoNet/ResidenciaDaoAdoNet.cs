@@ -22,14 +22,24 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "INSERT INTO RESIDENCIA(nome) VALUES(@nome); SELECT CAST(scope_identity() AS int)");
+                SqlCommand comand = createCommand(conection, "INSERT INTO RESIDENCIA(Nome, Cidade, Pais, Bairro, Rua, Numero) VALUES(@Nome, @Cidade, @Pais, @Bairro, @Rua, @Numero); SELECT CAST(scope_identity() AS int)");
 
                 // Define as informações do parâmetro criado
-                SqlParameter param = new SqlParameter("@nome", residencia.Nome);
+                SqlParameter param = new SqlParameter("@Nome", residencia.Nome);
                 comand.Parameters.Add(param);
+                SqlParameter param1 = new SqlParameter("@Cidade", null);
+                comand.Parameters.Add(param1);
+                SqlParameter param2 = new SqlParameter("@Pais", null);
+                comand.Parameters.Add(param2);
+                SqlParameter param3 = new SqlParameter("@Bairro", null);
+                comand.Parameters.Add(param3);
+                SqlParameter param4 = new SqlParameter("@Rua", null);
+                comand.Parameters.Add(param4);
+                SqlParameter param5 = new SqlParameter("@Numero", null);
+                comand.Parameters.Add(param5);
 
                 // TODO: Verificar se o resultado retornado não é nulo para poder converter.
-                residencia.Id = Convert.ToInt32( comand.ExecuteNonQuery() );
+                residencia.Id = Convert.ToInt32( comand.ExecuteScalar() );
 
                 return residencia;
             }
@@ -44,7 +54,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
             
         }
 
-        public Residencia Find(int id)
+        public Residencia Find(int idResidencia)
         {
             SqlConnection conection = null;
             SqlDataReader reader = null;            
@@ -55,16 +65,16 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "SELECT id,nome from RESIDENCIAS where id = @id");
+                SqlCommand comand = createCommand(conection, "SELECT idResidencia, Nome, Pais, Cidade, Bairro, Rua, Numero from RESIDENCIA where idResidencia = @idResidencia");
                 
                 // Define as informações de parâmetro
-                SqlParameter param = new SqlParameter("@id", id);
+                SqlParameter param = new SqlParameter("@idResidencia", idResidencia);
                 comand.Parameters.Add(param);
 
                 // Executando o commando e obtendo o resultado
                 reader = comand.ExecuteReader();
 
-                return readResidencia(reader);
+                return readSingleResidencia(reader);
                 
             }
             finally
@@ -85,7 +95,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection,"SELECT id,nome from RESIDENCIAS");                
+                SqlCommand comand = createCommand(conection, "SELECT idResidencia, Nome, Pais, Cidade, Bairro, Rua, Numero from RESIDENCIA");                
 
                 // Executando o commando e obtendo o resultado
                 reader = comand.ExecuteReader();
@@ -110,10 +120,10 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "DELETE from RESIDENCIAS where id = @id");
+                SqlCommand comand = createCommand(conection, "DELETE from RESIDENCIA where idResidencia = @idResidencia");
 
                 // Define as informações do parâmetro criado
-                SqlParameter param = new SqlParameter("@id", residencia.Id);
+                SqlParameter param = new SqlParameter("@idResidencia", residencia.Id);
 
                 comand.Parameters.Add(param);
 
@@ -140,13 +150,23 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "UPDATE RESIDENCIAS Set nome = @nome WHERE id = @id");
+                SqlCommand comand = createCommand(conection, "UPDATE RESIDENCIA Set Nome = @Nome, Cidade = @Cidade, Pais = @Pais, Bairro = @Bairro, Rua = @Rua, Numero = @Numero WHERE idResidencia = @idResidencia");
 
                 // Define as informações do parâmetro criado
-                SqlParameter param = new SqlParameter("@id", residencia.Id);
+                SqlParameter param = new SqlParameter("@idResidencia", residencia.Id);
                 comand.Parameters.Add(param);
-                SqlParameter param1 = new SqlParameter("@nome", residencia.Nome);
+                SqlParameter param1 = new SqlParameter("@Nome", residencia.Nome);
                 comand.Parameters.Add(param1);
+                SqlParameter param2 = new SqlParameter("@Cidade", null);
+                comand.Parameters.Add(param2);
+                SqlParameter param3 = new SqlParameter("@Pais", null);
+                comand.Parameters.Add(param3);
+                SqlParameter param4 = new SqlParameter("@Bairro", null);
+                comand.Parameters.Add(param4);
+                SqlParameter param5 = new SqlParameter("@Rua", null);
+                comand.Parameters.Add(param5);
+                SqlParameter param6 = new SqlParameter("@Numero", null);
+                comand.Parameters.Add(param6);
 
                 comand.ExecuteNonQuery();
                 
@@ -160,22 +180,33 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
 
         }
 
+        private Residencia readSingleResidencia(SqlDataReader reader)
+        {
+            Residencia residencia = null;
+
+            if ( reader.Read() )
+            {
+                residencia = readResidencia(reader);
+            }
+
+            return residencia;
+        }
+
 
         private Residencia readResidencia(SqlDataReader reader)
         {
             Residencia residencia = null;
 
+
             if (reader != null)
             {
-
                 if (reader.HasRows)
                 {
                     residencia = new Residencia();
 
-                    residencia.Id = Convert.ToInt32(reader["id"]);
-                    residencia.Nome = (String)reader["nome"];
+                    residencia.Id = Convert.ToInt32(reader["idResidencia"]);
+                    residencia.Nome = (String)reader["Nome"];
                 }
-
             }
 
             return residencia;
@@ -188,17 +219,14 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
 
             if (reader != null)
             {
-
-                while (reader.NextResult())
+                while (reader.Read())
                 {
                     residencias.Add(readResidencia(reader));
-                }
-
+                } 
             }
 
             return residencias;
 
         }
-
     }
 }

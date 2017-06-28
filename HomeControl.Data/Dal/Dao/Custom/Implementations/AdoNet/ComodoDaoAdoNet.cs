@@ -21,16 +21,16 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "INSERT INTO COMODOES(Nome, Residencia_Id) VALUES(@Nome, @Residencias_Id); SELECT CAST(scope_identity() AS int)");
+                SqlCommand comand = createCommand(conection, "INSERT INTO COMODO(Nome, idResidencia) VALUES(@Nome, @idResidencia); SELECT CAST(scope_identity() AS int)");
 
                 // Define as informações do parâmetro criado
                 SqlParameter param = new SqlParameter("@Nome", comodo.Nome);
                 comand.Parameters.Add(param);
-                SqlParameter param1 = new SqlParameter("@Residencia_Id", comodo.ResidenciaId);
+                SqlParameter param1 = new SqlParameter("@idResidencia", comodo.ResidenciaId);
                 comand.Parameters.Add(param1);
 
                 // TODO: Verificar se o resultado retornado não é nulo para poder converter.
-                comodo.Id = Convert.ToInt32(comand.ExecuteNonQuery());
+                comodo.Id = Convert.ToInt32(comand.ExecuteScalar());
 
                 return comodo;
             }
@@ -45,7 +45,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
 
         }
 
-        public Comodo Find(int id)
+        public Comodo Find(int idComodo)
         {
             SqlConnection conection = null;
             SqlDataReader reader = null;
@@ -56,17 +56,16 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "SELECT Id,Nome,Residencia_Id from COMODOES where Id = @Id");
+                SqlCommand comand = createCommand(conection, "SELECT idComodo, Nome, idResidencia from COMODO where idComodo = @idComodo");
 
                 // Define as informações de parâmetro
-                SqlParameter param = new SqlParameter("@Id", id);
+                SqlParameter param = new SqlParameter("@idComodo", idComodo);
                 comand.Parameters.Add(param);
 
                 // Executando o commando e obtendo o resultado
                 reader = comand.ExecuteReader();
 
-                return readComodo(reader);
-
+                return readSingleComodo(reader);
             }
             finally
             {
@@ -86,13 +85,12 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "SELECT Id,Nome,Residencia_Id from COMODOES");
+                SqlCommand comand = createCommand(conection, "SELECT idComodo, Nome, idResidencia from COMODO");
 
                 // Executando o commando e obtendo o resultado
                 reader = comand.ExecuteReader();
 
                 return readAllComodo(reader);
-
             }
             finally
             {
@@ -111,10 +109,10 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "DELETE from COMODOES where Id = @Id");
+                SqlCommand comand = createCommand(conection, "DELETE from COMODO where idComodo = @idComodo");
 
                 // Define as informações do parâmetro criado
-                SqlParameter param = new SqlParameter("@Id", comodo.Id);
+                SqlParameter param = new SqlParameter("@idComodo", comodo.Id);
 
                 comand.Parameters.Add(param);
 
@@ -141,14 +139,14 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "UPDATE COMODOES Set Nome = @Nome, Residencia_Id = @Residencia_Id WHERE Id = @Id");
+                SqlCommand comand = createCommand(conection, "UPDATE COMODO Set Nome = @Nome, idResidencia = @idResidencia WHERE idComodo = @idComodo");
 
                 // Define as informações do parâmetro criado
-                SqlParameter param = new SqlParameter("@Id", comodo.Id);
+                SqlParameter param = new SqlParameter("@idComodo", comodo.Id);
                 comand.Parameters.Add(param);
                 SqlParameter param1 = new SqlParameter("@Nome", comodo.Nome);
                 comand.Parameters.Add(param1);
-                SqlParameter param2 = new SqlParameter("@Residencia_Id", comodo.ResidenciaId);
+                SqlParameter param2 = new SqlParameter("@idResidencia", comodo.ResidenciaId);
                 comand.Parameters.Add(param2);
 
                 comand.ExecuteNonQuery();
@@ -163,22 +161,34 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
 
         }
 
+        private Comodo readSingleComodo(SqlDataReader reader)
+        {
+            Comodo comodo = null;
+
+            if (reader.Read())
+            {
+                comodo = readComodo(reader);
+            }
+
+            return comodo;
+        }
+
+
         private Comodo readComodo(SqlDataReader reader)
         {
             Comodo comodo = null;
 
+
             if (reader != null)
             {
-
                 if (reader.HasRows)
                 {
                     comodo = new Comodo();
 
-                    comodo.Id = Convert.ToInt32(reader["Id"]);
+                    comodo.Id = Convert.ToInt32(reader["idComodo"]);
                     comodo.Nome = (String)reader["Nome"];
-                    comodo.ResidenciaId = Convert.ToInt32(reader["Residencia_Id"]);
+                    comodo.ResidenciaId = Convert.ToInt32(reader["idResidencia"]);
                 }
-
             }
 
             return comodo;
@@ -191,12 +201,10 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
 
             if (reader != null)
             {
-
-                while (reader.NextResult())
+                while (reader.Read())
                 {
                     comodos.Add(readComodo(reader));
                 }
-
             }
 
             return comodos;
