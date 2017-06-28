@@ -11,6 +11,7 @@ namespace HomeControl.Domain.Dispositivos
         private String nome;
         private String socket;
         private String macAddress;
+        private int comodoId;
         private HashSet<Dispositivo> dispositivos;
 
        
@@ -60,6 +61,18 @@ namespace HomeControl.Domain.Dispositivos
             set
             {
                 this.macAddress = value;
+            }
+        }
+
+        public int ComodoId
+        {
+            get
+            {
+                return this.comodoId;
+            }
+            set
+            {
+                this.comodoId = value;
             }
         }
 

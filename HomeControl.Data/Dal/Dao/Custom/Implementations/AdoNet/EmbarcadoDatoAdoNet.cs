@@ -20,7 +20,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "INSERT INTO CONTROLADOR( Nome, Ip_Address, Mac_Address ) VALUES( @Nome, @Ip_Address, @Mac_Address ); SELECT CAST(scope_identity() AS int)");
+                SqlCommand comand = createCommand(conection, "INSERT INTO CONTROLADOR( Nome, Ip_Address, Mac_Address, IdComodo ) VALUES( @Nome, @Ip_Address, @Mac_Address, @IdComodo ); SELECT CAST(scope_identity() AS int)");
 
                 // Define as informações do parâmetro criado
                 SqlParameter param = new SqlParameter("@Nome", embarcado.Nome);
@@ -29,9 +29,12 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 comand.Parameters.Add(param1);
                 SqlParameter param2 = new SqlParameter("@Mac_Address", embarcado.MacAddress);
                 comand.Parameters.Add(param2);
+                int comodoId = 4;
+                SqlParameter param3 = new SqlParameter("@IdComodo", comodoId); // embarcado.ComodoId não é preenchido em nenhum lugar, valor de teste sendo utilizado
+                comand.Parameters.Add(param3);
 
                 // TODO: Verificar se o resultado retornado não é nulo para poder converter.
-                embarcado.Id = Convert.ToInt32(comand.ExecuteNonQuery());
+                embarcado.Id = Convert.ToInt32( comand.ExecuteScalar() );
 
                 return embarcado;
             }

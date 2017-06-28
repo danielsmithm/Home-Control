@@ -11,6 +11,8 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
 {
     public class SensorDaoAdoNet : AbstractAdoNetDao, ISensorDao
     {
+        public const String DISCRIMINATOR_SENSOR = "SENSOR";
+
         public Sensor Add(Sensor sensor)
         {
             SqlConnection conection = null;
@@ -20,30 +22,28 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "INSERT INTO DISPOSITIVOES( Ativo, Porta, Estado, Discriminator, Comodo_Id, ValorAtual, ValorMaximo, ValorMinimo, EstadoAtual ) VALUES( @Ativo, @Porta, @Estado, @Discriminator, @Comodo_Id, @ValorAtual, @ValorMaximo, @ValorMinimo, @EstadoAtual ); SELECT CAST(scope_identity() AS int)");
+                SqlCommand comand = createCommand(conection, "INSERT INTO DISPOSITIVO( Ativo, Porta, Nome, ValorMaximo, ValorMinimo, Discriminator, Estado, IdControlador ) VALUES( @Ativo, @Porta, @Nome, @ValorMaximo, @ValorMinimo, @Discriminator, @Estado, @IdControlador ); SELECT CAST(scope_identity() AS int)");
 
                 // Define as informações do parâmetro criado
                 SqlParameter param = new SqlParameter("@Ativo", sensor.Ativo);
                 comand.Parameters.Add(param);
                 SqlParameter param1 = new SqlParameter("@Porta", sensor.Porta);
                 comand.Parameters.Add(param1);
-                SqlParameter param2 = new SqlParameter("@Estado", sensor.Estado);
+                SqlParameter param2 = new SqlParameter("@Nome", ""); // ??;
                 comand.Parameters.Add(param2);
-                SqlParameter param3 = new SqlParameter("@Discriminator", null); // sensor.Discriminator ??
+                SqlParameter param3 = new SqlParameter("@ValorMaximo", ""); // ??
                 comand.Parameters.Add(param3);
-                SqlParameter param4 = new SqlParameter("@Comodo_Id", sensor.ComodoId);
+                SqlParameter param4 = new SqlParameter("@ValorMinimo", ""); // ??
                 comand.Parameters.Add(param4);
-                SqlParameter param5 = new SqlParameter("@ValorAtual", sensor.valorAtual); // ??
+                SqlParameter param5 = new SqlParameter("@Discriminator", DISCRIMINATOR_SENSOR);
                 comand.Parameters.Add(param5);
-                SqlParameter param6 = new SqlParameter("@ValorMaximo", null); // ??
+                SqlParameter param6 = new SqlParameter("@Estado", sensor.Estado); // ??
                 comand.Parameters.Add(param6);
-                SqlParameter param7 = new SqlParameter("@ValorMinimo", null); // ??
+                SqlParameter param7 = new SqlParameter("@IdControlador", sensor.ComodoId); // Deveria ser ControladorId
                 comand.Parameters.Add(param7);
-                SqlParameter param8 = new SqlParameter("@EstadoAtual", null); // ??
-                comand.Parameters.Add(param8);
 
                 // TODO: Verificar se o resultado retornado não é nulo para poder converter.
-                sensor.Id = Convert.ToInt32(comand.ExecuteNonQuery());
+                sensor.Id = Convert.ToInt32(comand.ExecuteScalar());
 
                 return sensor;
             }
@@ -69,16 +69,18 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "SELECT (  Id, Ativo, Porta, Estado, Comodo_Id, ValorAtual ) from DISPOSITIVOES where Id = @Id");
+                SqlCommand comand = createCommand(conection, "SELECT IdDispositivo, Ativo, Porta, Discriminator, Estado, IdControlador from DISPOSITIVO where Discriminator = @Discriminator and IdDispositivo = @IdDispositivo");
 
                 // Define as informações de parâmetro
-                SqlParameter param = new SqlParameter("@Id", id);
+                SqlParameter param = new SqlParameter("@IdDispositivo", id);
                 comand.Parameters.Add(param);
+                SqlParameter param1 = new SqlParameter("@Discriminator", DISCRIMINATOR_SENSOR);
+                comand.Parameters.Add(param1);
 
                 // Executando o commando e obtendo o resultado
                 reader = comand.ExecuteReader();
 
-                return readSensor(reader);
+                return readSingleSensor(reader);
 
             }
             finally
@@ -98,8 +100,11 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 // instantiate and open connection
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
+                SqlCommand comand = createCommand(conection, "SELECT IdDispositivo, Ativo, Porta, Discriminator, Estado, IdControlador from DISPOSITIVO where Discriminator = @Discriminator");
 
-                SqlCommand comand = createCommand(conection, "SELECT (  Id, Ativo, Porta, Estado, Comodo_Id, ValorAtual ) from DISPOSITIVOES");
+                // Define as informações de parâmetro
+                SqlParameter param = new SqlParameter("@Discriminator", DISCRIMINATOR_SENSOR);
+                comand.Parameters.Add(param); ;
 
                 // Executando o commando e obtendo o resultado
                 reader = comand.ExecuteReader();
@@ -124,10 +129,10 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "DELETE from DISPOSITIVOES where Id = @Id");
+                SqlCommand comand = createCommand(conection, "DELETE from DISPOSITIVO where IdDispositivo = @IdDispositivo");
 
                 // Define as informações do parâmetro criado
-                SqlParameter param = new SqlParameter("@Id", sensor.Id);
+                SqlParameter param = new SqlParameter("@IdDispositivo", sensor.Id);
 
                 comand.Parameters.Add(param);
 
@@ -154,29 +159,27 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "UPDATE DISPOSITIVOES Set Ativo = @Ativo, Porta = @Porta, Estado = @Estado, Discriminator = @Discriminator, Comodo_Id = @Comodo_Id, ValorAtual = @ValorAtual, ValorMaximo = @ValorMaximo, ValorMinimo = @ValorMinimo, EstadoAtual = @EstadoAtual WHERE Id = @Id");
+                SqlCommand comand = createCommand(conection, "UPDATE DISPOSITIVO Set Ativo = @Ativo, Porta = @Porta, Nome = @Nome, ValorMaximo = @ValorMaximo, ValorMinimo = @ValorMinimo, Discriminator = @Discriminator, Estado = @Estado, IdControlador = @IdControlador WHERE IdDispositivo = @IdDispositivo");
 
                 // Define as informações do parâmetro criado
-                SqlParameter param = new SqlParameter("@Id", sensor.Id);
+                SqlParameter param = new SqlParameter("@IdDispositivo", sensor.Id);
                 comand.Parameters.Add(param);
                 SqlParameter param1 = new SqlParameter("@Ativo", sensor.Ativo);
                 comand.Parameters.Add(param1);
                 SqlParameter param2 = new SqlParameter("@Porta", sensor.Porta);
                 comand.Parameters.Add(param2);
-                SqlParameter param3 = new SqlParameter("@Estado", sensor.Estado);
+                SqlParameter param3 = new SqlParameter("@Nome", ""); // ??;
                 comand.Parameters.Add(param3);
-                SqlParameter param4 = new SqlParameter("@Discriminator", null); // sensor.Discriminator ??
+                SqlParameter param4 = new SqlParameter("@ValorMaximo", ""); // ??
                 comand.Parameters.Add(param4);
-                SqlParameter param5 = new SqlParameter("@Comodo_Id", sensor.ComodoId);
+                SqlParameter param5 = new SqlParameter("@ValorMinimo", ""); // ??
                 comand.Parameters.Add(param5);
-                SqlParameter param6 = new SqlParameter("@ValorAtual", sensor.valorAtual); // ??
+                SqlParameter param6 = new SqlParameter("@Discriminator", DISCRIMINATOR_SENSOR);
                 comand.Parameters.Add(param6);
-                SqlParameter param7 = new SqlParameter("@ValorMaximo", null); // ??
+                SqlParameter param7 = new SqlParameter("@Estado", sensor.Estado); // ??
                 comand.Parameters.Add(param7);
-                SqlParameter param8 = new SqlParameter("@ValorMinimo", null); // ??
+                SqlParameter param8 = new SqlParameter("@IdControlador", sensor.ComodoId); // Deveria ser ControladorId
                 comand.Parameters.Add(param8);
-                SqlParameter param9 = new SqlParameter("@EstadoAtual", null); // ??
-                comand.Parameters.Add(param9);
 
                 comand.ExecuteNonQuery();
 
@@ -190,6 +193,18 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
 
         }
 
+        private Sensor readSingleSensor(SqlDataReader reader)
+        {
+            Sensor sensor = null;
+
+            if (reader.Read())
+            {
+                sensor = readSensor(reader);
+            }
+
+            return sensor;
+        }
+
         private Sensor readSensor(SqlDataReader reader)
         {
             Sensor sensor = null;
@@ -201,12 +216,11 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 {
                     sensor = new Sensor();
 
-                    sensor.Id = Convert.ToInt32(reader["Id"]);
-                    sensor.Ativo = (Boolean)reader["Nome"];
+                    sensor.Id = Convert.ToInt32(reader["IdDispositivo"]);
+                    sensor.Ativo = Convert.ToBoolean(reader["Ativo"]);
                     sensor.Porta = Convert.ToInt32(reader["Porta"]);
                     sensor.Estado = Convert.ToInt32(reader["Estado"]);
-                    //sensor.Discriminator = (String)reader["Discriminator"]; // ???
-                    sensor.ComodoId = Convert.ToInt32(reader["Comodo_Id"]);
+                    sensor.ComodoId = Convert.ToInt32(reader["IdControlador"]); // Deveria atribuir a IdControlador e não ComodoId
                 }
 
             }
@@ -222,7 +236,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
             if (reader != null)
             {
 
-                while (reader.NextResult())
+                while (reader.Read())
                 {
                     sensors.Add(readSensor(reader));
                 }
