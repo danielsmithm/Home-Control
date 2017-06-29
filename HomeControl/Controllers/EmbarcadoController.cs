@@ -7,12 +7,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using HomeControl.Domain.Residencia;
+using Ninject;
 
 namespace HomeControl.Controllers
 {
     public class EmbarcadoController : Controller
     {
         private IEmbarcadoService _embarcadoService = new EmbarcadoService();
+        private IComodoService _comodoService = new ComodoService();
+
+        [Inject]
+        public EmbarcadoController(IEmbarcadoService embarcadoService, IComodoService comodoService)
+        {
+            _embarcadoService = embarcadoService;
+            _comodoService = comodoService;
+        }
 
         // GET: Embarcado
         public ActionResult Index()
@@ -38,6 +48,7 @@ namespace HomeControl.Controllers
         // GET: Embarcado/Create
         public ActionResult Create()
         {
+            PopulateSelectListComodo();
             return View();
         }
 
@@ -53,6 +64,7 @@ namespace HomeControl.Controllers
             }
             catch (BusinessException ex)
             {
+                PopulateSelectListComodo();
                 AddValidationErrorsToModelState(ex.Errors);
                 return View(embarcado);
             }
@@ -69,6 +81,7 @@ namespace HomeControl.Controllers
                 return RedirectToAction("Index");
             }
 
+            PopulateSelectListComodo();
             return View(embarcado);
         }
 
@@ -84,6 +97,7 @@ namespace HomeControl.Controllers
             }
             catch (BusinessException ex)
             {
+                PopulateSelectListComodo();
                 AddValidationErrorsToModelState(ex.Errors);
                 return View(embarcado);
             }
@@ -117,6 +131,13 @@ namespace HomeControl.Controllers
                 AddValidationErrorsToModelState(ex.Errors);
                 return View(embarcado);
             }
+        }
+
+        private void PopulateSelectListComodo()
+        {
+            List<Comodo> comodo = _comodoService.FindAll();
+            SelectList listaOpcoesComodos = new SelectList(comodo, "id", "Nome");
+            ViewBag.SelectListComodo = listaOpcoesComodos;
         }
 
         #region helpers

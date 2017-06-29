@@ -338,6 +338,9 @@
     <Content Include="Views\Sensor\Index.cshtml" />
     <Content Include="Views\Sensor\Create.cshtml" />
     <Content Include="Views\Sensor\VerValor.cshtml" />
+    <Content Include="Views\Sensor\Edit.cshtml" />
+    <Content Include="Views\Sensor\Delete.cshtml" />
+    <Content Include="Views\Sensor\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

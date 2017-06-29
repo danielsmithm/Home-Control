@@ -1,6 +1,8 @@
-﻿using System;
+﻿using HomeControl.Domain.Residencia;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HomeControl.Domain.Dispositivos
 {
@@ -11,7 +13,6 @@ namespace HomeControl.Domain.Dispositivos
         private String nome;
         private String socket;
         private String macAddress;
-        private int comodoId;
         private HashSet<Dispositivo> dispositivos;
 
        
@@ -64,7 +65,7 @@ namespace HomeControl.Domain.Dispositivos
             }
         }
 
-        public int ComodoId
+        /*public int ComodoId
         {
             get
             {
@@ -74,7 +75,7 @@ namespace HomeControl.Domain.Dispositivos
             {
                 this.comodoId = value;
             }
-        }
+        }*/
 
         public HashSet<Dispositivo> Dispositivos
         {
@@ -106,6 +107,13 @@ namespace HomeControl.Domain.Dispositivos
         public bool IsActive()
         {
             throw new NotImplementedException();
+        }
+
+        public int ComodoId { get; set; }
+        [ForeignKey("ComodoId")]
+        public virtual Comodo Comodo
+        {
+            get; protected set;
         }
     }
 }

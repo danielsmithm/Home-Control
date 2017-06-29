@@ -29,8 +29,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 comand.Parameters.Add(param1);
                 SqlParameter param2 = new SqlParameter("@Mac_Address", embarcado.MacAddress);
                 comand.Parameters.Add(param2);
-                int comodoId = 4;
-                SqlParameter param3 = new SqlParameter("@IdComodo", comodoId); // embarcado.ComodoId não é preenchido em nenhum lugar, valor de teste sendo utilizado
+                SqlParameter param3 = new SqlParameter("@IdComodo", embarcado.ComodoId);
                 comand.Parameters.Add(param3);
 
                 // TODO: Verificar se o resultado retornado não é nulo para poder converter.
@@ -60,7 +59,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "SELECT IdControlador, Nome, Ip_Address, Mac_Address from CONTROLADOR where IdControlador = @IdControlador");
+                SqlCommand comand = createCommand(conection, "SELECT IdControlador, Nome, Ip_Address, Mac_Address, IdComodo from CONTROLADOR where IdControlador = @IdControlador");
 
                 // Define as informações de parâmetro
                 SqlParameter param = new SqlParameter("@IdControlador", id);
@@ -90,7 +89,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
 
-                SqlCommand comand = createCommand(conection, "SELECT IdControlador, Nome, Ip_Address, Mac_Address from CONTROLADOR");
+                SqlCommand comand = createCommand(conection, "SELECT IdControlador, Nome, Ip_Address, Mac_Address, IdComodo from CONTROLADOR");
 
                 // Executando o commando e obtendo o resultado
                reader = comand.ExecuteReader();
@@ -145,7 +144,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 conection = ConnectionFactory.getConnection();
                 conection.Open();
                
-                SqlCommand comand = createCommand(conection, "UPDATE CONTROLADOR Set Nome = @Nome, Ip_Address = @Ip_Address, Mac_Address = @Mac_Address WHERE IdControlador = @IdControlador");
+                SqlCommand comand = createCommand(conection, "UPDATE CONTROLADOR Set Nome = @Nome, Ip_Address = @Ip_Address, Mac_Address = @Mac_Address, IdComodo = @IdComodo WHERE IdControlador = @IdControlador");
 
                 // Define as informações do parâmetro criado
                 SqlParameter param = new SqlParameter("@IdControlador", embarcado.Id);
@@ -156,6 +155,8 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 comand.Parameters.Add(param2);
                 SqlParameter param3 = new SqlParameter("@Mac_Address", embarcado.MacAddress);
                 comand.Parameters.Add(param3);
+                SqlParameter param4 = new SqlParameter("@IdComodo", embarcado.ComodoId);
+                comand.Parameters.Add(param4);
 
                 comand.ExecuteNonQuery();
 
@@ -196,6 +197,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                     embarcado.Nome = (String)reader["Nome"];
                     embarcado.Socket = (String)reader["Ip_Address"];
                     embarcado.MacAddress = (String)reader["Mac_Address"];
+                    embarcado.ComodoId = Convert.ToInt32(reader["IdComodo"]);
                 }
 
             }

@@ -75,6 +75,7 @@ namespace HomeControl.Controllers
                 return RedirectToAction("Index");
             }
 
+            PopulateSelectListComodo();
             return View(sensor);
         }
 
@@ -90,6 +91,7 @@ namespace HomeControl.Controllers
             }
             catch (BusinessException ex)
             {
+                PopulateSelectListComodo();
                 AddValidationErrorsToModelState(ex.Errors);
                 return View(sensor);
             }

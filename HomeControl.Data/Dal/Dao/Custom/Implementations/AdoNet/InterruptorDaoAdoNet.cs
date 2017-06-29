@@ -38,9 +38,9 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 comand.Parameters.Add(param4);
                 SqlParameter param5 = new SqlParameter("@Discriminator", DISCRIMINATOR_INTERRUPTOR);
                 comand.Parameters.Add(param5);
-                SqlParameter param6 = new SqlParameter("@Estado", interruptor.Estado); // ??
+                SqlParameter param6 = new SqlParameter("@Estado", interruptor.Estado);
                 comand.Parameters.Add(param6);
-                SqlParameter param7 = new SqlParameter("@IdControlador", interruptor.ComodoId); // Deveria ser ControladorId
+                SqlParameter param7 = new SqlParameter("@IdControlador", interruptor.Embarcadoid);
                 comand.Parameters.Add(param7);
 
                 // TODO: Verificar se o resultado retornado não é nulo para poder converter.
@@ -179,7 +179,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 comand.Parameters.Add(param6);
                 SqlParameter param7 = new SqlParameter("@Estado", interruptor.Estado); // ??
                 comand.Parameters.Add(param7);
-                SqlParameter param8 = new SqlParameter("@IdControlador", interruptor.ComodoId); // Deveria ser ControladorId
+                SqlParameter param8 = new SqlParameter("@IdControlador", interruptor.Embarcadoid);
                 comand.Parameters.Add(param8);
 
                 comand.ExecuteNonQuery();

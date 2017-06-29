@@ -39,7 +39,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 comand.Parameters.Add(param5);
                 SqlParameter param6 = new SqlParameter("@Estado", sensor.Estado); // ??
                 comand.Parameters.Add(param6);
-                SqlParameter param7 = new SqlParameter("@IdControlador", sensor.ComodoId); // Deveria ser ControladorId
+                SqlParameter param7 = new SqlParameter("@IdControlador", sensor.Embarcadoid); // Deveria ser ControladorId
                 comand.Parameters.Add(param7);
 
                 // TODO: Verificar se o resultado retornado não é nulo para poder converter.
@@ -178,7 +178,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                 comand.Parameters.Add(param6);
                 SqlParameter param7 = new SqlParameter("@Estado", sensor.Estado); // ??
                 comand.Parameters.Add(param7);
-                SqlParameter param8 = new SqlParameter("@IdControlador", sensor.ComodoId); // Deveria ser ControladorId
+                SqlParameter param8 = new SqlParameter("@IdControlador", sensor.Embarcadoid); // Deveria ser ControladorId
                 comand.Parameters.Add(param8);
 
                 comand.ExecuteNonQuery();
@@ -220,7 +220,7 @@ namespace HomeControl.Data.Dal.Dao.Custom.Implementations.AdoNet
                     sensor.Ativo = Convert.ToBoolean(reader["Ativo"]);
                     sensor.Porta = Convert.ToInt32(reader["Porta"]);
                     sensor.Estado = Convert.ToInt32(reader["Estado"]);
-                    sensor.ComodoId = Convert.ToInt32(reader["IdControlador"]); // Deveria atribuir a IdControlador e não ComodoId
+                    sensor.Embarcadoid = Convert.ToInt32(reader["IdControlador"]);
                 }
 
             }
